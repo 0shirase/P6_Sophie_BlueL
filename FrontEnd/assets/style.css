@@ -1,0 +1,436 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+* {box-sizing: border-box; }
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/** end reset css**/
+body {
+	max-width: 1140px;
+	margin:auto;
+	font-family: 'Work Sans' ;
+	font-size: 14px;
+}
+header {
+	display: flex;
+	justify-content: space-between;
+	margin: 50px 0
+}
+section {
+	margin: 50px 0
+}
+
+h1{
+	display: flex;
+	flex-direction: column;
+	font-family: 'Syne';
+	font-size: 22px;
+	font-weight: 800;
+	color: #B1663C
+}
+
+h1 > span {
+	font-family: 'Work Sans';
+	font-size:10px;
+	letter-spacing: 0.1em;
+;
+}
+
+h2{
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 30px;
+	color: #1D6154
+}
+nav ul {
+	display: flex;
+	align-items: center;
+	list-style-type: none;
+}
+nav ul a{
+	text-decoration: none;
+	color: black;
+}
+
+nav li {
+	padding: 0 10px;
+	font-size: 1.2em;
+}
+
+li:hover {
+	color: #B1663C;
+}
+#introduction {
+	display: flex;
+	align-items: center;
+}
+#introduction figure {
+	flex: 1
+}
+#introduction img {
+	display: block;
+	margin: auto;
+	width: 80%;
+}
+
+#introduction article {
+	flex: 1
+}
+#introduction h2 {
+	margin-bottom: 1em;
+}
+
+#introduction p {
+	margin-bottom: 0.5em;
+}
+#portfolio h2 {
+	text-align: center;
+	margin-bottom: 1em;
+}
+.gallery {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-column-gap: 20px;
+	grid-row-gap: 20px;
+}
+
+.gallery img {
+	width: 100%;
+
+}
+#contact {
+	width: 50%;
+margin: auto;
+}
+#contact > * {
+	text-align: center;
+
+}
+#contact h2{
+	margin-bottom: 20px;
+}
+#contact form {
+	text-align: left;
+	margin-top:30px;
+	display: flex;
+	flex-direction: column;
+}
+
+#contact input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+#contact label {
+	margin: 2em 0 1em 0;
+}
+#contact textarea {
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+input[type="submit"]{
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	margin : 2em auto ;
+	width: 180px;
+	text-align: center;
+	border-radius: 60px ;
+}
+
+footer nav ul {
+	display: flex;
+	justify-content: flex-end;
+	margin: 2em;
+}
+
+
+.filters {
+	display: flex;
+	justify-content: center;
+	padding-bottom: 45px;
+	gap: 13px;
+}
+
+
+.btnfilter{
+	padding: 6px;
+	border-radius: 20px;
+	width: 135px;
+	border: 1px solid #1D6154;
+	background-color: white;
+	color: #1D6154;
+
+}
+
+.btnfilter.selected {
+    background-color: #1D6154;
+    color: white;
+}
+
+.fa-pencil {
+	color: white;
+}
+
+.portfoliotitle {
+	display: flex;
+	justify-content: center;
+	gap: 30px;
+}
+
+.modified-button {
+	font-family: Work Sans;
+}
+
+.error-message {
+	color: red;
+	font-weight: bold;
+}
+/* modal */
+.modal {
+	position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+	
+}
+
+.modal-wrapper {
+	display: flex;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: auto;
+    width: 37%;
+    padding: 50px;
+    background-color: #FFF;
+	flex-wrap: wrap;
+	border-radius: 10px;
+}
+
+
+.modal-header {
+	width: 100%;
+	display: flex;
+}
+
+.modal-wrapper .modal-image {
+    width: 100px; 
+	height: 130px;
+    display: flex;
+	
+}	
+
+.modal-wrapper h3 {
+	text-align: center;
+	font-size: 24px;
+	margin-bottom: 20px;
+	width: 100%;
+	text-decoration: none;
+	display: flex;
+	justify-content: center;
+}
+
+.modal-title {
+	width: 100%;
+	margin-bottom: 30px;
+}
+
+.works-modal {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.add-photo-modal {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+
+.line-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #B3B3B3; 
+    margin: 10px 0; 
+}
+
+  /* Ajoutez ce style pour le conteneur de l'image */
+.img-container {
+    position: relative;
+    overflow: hidden;
+	padding-bottom: 30px;
+}
+
+/* Style pour le bouton de suppression */
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 2; 
+	background-color: black;
+	font-family: Work Sans;
+	border-radius: 6px;
+	padding: 4%;
+}
+
+.fa-trash-alt {
+	font-weight: normal;
+}
+
+
+.close-button {
+	position: absolute;
+	top: 15px;
+	right: 30px;
+	font-size: 30px;
+}
+
+.close-button:hover{
+	cursor: pointer;
+}
+
+.photo-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.photo-form .modal-wrapper {
+	display: flex;
+	justify-content: center;
+}
+
+.back-arrow {
+    position: absolute;
+    top: -25px;
+    left: 30px;
+    font-size: 20px;
+    color: black;
+    cursor: pointer;
+}
+
+.header-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-div {
+    margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.button-div {
+    margin-top: 20px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.header-div .close-button {
+	position: absolute;
+	top: -25px;
+	right: 30px;
+}
+
+.Submit-Button-Modal {
+	display: flex;
+	justify-content: center;
+}
+
+.rectangle-div {
+    background-color: #3498db; /* Bleu */
+    padding: 20px;
+    text-align: center;
+}
+
+.add-photo-button-rectangle {
+    background-color: #CBD6DC; 
+    color: #306685;
+	font-size: 14px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.rectangle-div {
+	background: #E8F1F6;
+	border-radius: 3px;
+	padding-left: 25%;
+	padding-right: 25%;
+	display: flex;
+	flex-direction: column;
+}
+
+.image-icon {
+	margin-bottom: 10px; 
+	font-size: 45px; 
+	color: #CBD6DC;
+  }
+
+  .inputfile {
+	display: none; /* Masque le champ d'entrée de type "file" par défaut */
+}
