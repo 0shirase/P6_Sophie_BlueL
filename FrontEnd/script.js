@@ -86,14 +86,6 @@ async function displayWorks(categorieId) {
     }
 }
 
-
-
-
-
-
-
-
-
 /***Création des projets dans la gallery***/
 function createWorks(works) {
     const figure = document.createElement("figure");
