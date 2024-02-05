@@ -1,9 +1,14 @@
+document.addEventListener('DOMContentLoaded', function() {
 const gallery = document.querySelector('.gallery');
-
 const filters = document.querySelector(".filters");
 const portfoliotitle = document.querySelector(".portfoliotitle");
 const modal = document.querySelector('#modal1');
 const token = sessionStorage.getItem("token");
+const titleAndCloseDiv = document.querySelector('.modal-title');
+const worksDiv = document.querySelector('.works-modal');
+const lineDivider = document.querySelector('.line-divider');
+const addPhotoButtonModal = document.querySelector('.add-photo-modal');
+
 
 async function main() {
     displayWorks();
@@ -119,6 +124,7 @@ function createFilter(category) {
 
 async function displayfilters() {
     const dataCategories = await getCategories();
+    
 
 
     dataCategories.forEach((category) => {
@@ -418,9 +424,29 @@ async function createModal() {
     }
 }
 
+// Fonction pour créer l'input select de catégorie
+async function createCategorySelect(callback) {
+    const categorySelect = document.createElement('select');
+    categorySelect.name = 'category';
+
+    try {
+        const dataCategories = await getCategories();
+
+        dataCategories.forEach((category) => {
+            const option = document.createElement('option');
+            option.value = category.id;
+            option.text = category.name;
+            categorySelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des catégories :', error);
+    }
+
+    callback(categorySelect);
+}
 
 /*Fonction pour créer le formulaire d'ajout de photo*/
-function createPhotoForm() {
+ function createPhotoForm() {
     const form = document.createElement('form');
     form.classList.add('photo-form');
 
@@ -438,8 +464,10 @@ function createPhotoForm() {
     closeFormButton.innerHTML = '&times;';
     closeFormButton.classList.add('close-button');
 
-
-
+    closeFormButton.addEventListener('click', function () {
+        closeModal(); // Appeler la fonction pour fermer la fenêtre modale
+    });
+    
     headerDiv.appendChild(closeFormButton);
 
     /*Ajout de la flèche pour revenir en arrière*/
@@ -454,16 +482,48 @@ function createPhotoForm() {
     const rectangleDiv = document.createElement('div');
     rectangleDiv.classList.add('rectangle-div');
 
+    
     /*Ajout de l'icône fa-image au-dessus du bouton*/
     const imageIcon = document.createElement('i');
     imageIcon.classList.add('fas', 'fa-image', 'image-icon');
     rectangleDiv.appendChild(imageIcon);
 
-    /*Ajout du bouton Ajouter Photo au rectangle*/
-    const addButton = document.createElement('button');
-    addButton.textContent = '+ Ajouter Photo';
-    addButton.classList.add('add-photo-button-rectangle');
-    rectangleDiv.appendChild(addButton);
+    /* Remplacer le bouton "Ajouter Photo" par un input de type fichier */
+const fileInput = document.createElement('input');
+fileInput.type = 'file';
+fileInput.name = 'photo';
+fileInput.accept = 'image/*'; 
+
+/* Ajouter une classe au fichier input pour le style CSS */
+fileInput.classList.add('file-input');
+
+/* Ajouter un événement d'écoute pour le changement de fichier */
+fileInput.addEventListener('change', function (event) {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+        // Créer un objet FileReader
+        const reader = new FileReader();
+
+        // Définir la fonction de rappel pour la lecture du fichier
+        reader.onload = function (e) {
+            // Créer une balise img pour afficher la miniature
+            const previewImage = document.createElement('img');
+            previewImage.src = e.target.result;
+            previewImage.classList.add('preview-image');
+
+            // Supprimer le contenu actuel de rectangleDiv
+            rectangleDiv.innerHTML = '';
+
+            // Ajouter la miniature à rectangleDiv
+            rectangleDiv.appendChild(previewImage);
+        };
+
+        // Lire le fichier en tant que Data URL
+        reader.readAsDataURL(selectedFile);
+    }
+});
+
+rectangleDiv.appendChild(fileInput);
 
     /*Ajout du texte en dessous du bouton*/
     const infoText = document.createElement('p');
@@ -473,29 +533,33 @@ function createPhotoForm() {
     /*Ajout du rectangle à la div du formulaire*/
     form.appendChild(rectangleDiv);
 
-    /* création des Div pour les inputs titre et catégorie */
-    const inputDiv = document.createElement('div');
-    inputDiv.classList.add('input-div');
+   /* création des Div pour les inputs titre et catégorie */
+   const inputDiv = document.createElement('div');
+   inputDiv.classList.add('input-div');
 
-    const titleLabel = document.createElement('label');
-    titleLabel.textContent = 'Titre';
-    const titleInput = document.createElement('input');
-    titleInput.type = 'text';
-    titleInput.name = 'title';
+   const titleLabel = document.createElement('label');
+   titleLabel.textContent = 'Titre';
+   const titleInput = document.createElement('input');
+   titleInput.type = 'text';
+   titleInput.name = 'title';
 
-    const categoryLabel = document.createElement('label');
-    categoryLabel.textContent = 'Catégorie';
-    const categoryInput = document.createElement('input');
-    categoryInput.type = 'text';
-    categoryInput.name = 'category';
+   const categoryLabel = document.createElement('label');
+   categoryLabel.textContent = 'Catégorie';
 
-    inputDiv.appendChild(titleLabel);
-    inputDiv.appendChild(titleInput);
-    inputDiv.appendChild(categoryLabel);
-    inputDiv.appendChild(categoryInput);
+   // Appel de createCategorySelect avec une fonction callback
+   createCategorySelect((categorySelect) => {
+       inputDiv.appendChild(titleLabel);
+       inputDiv.appendChild(titleInput);
+       inputDiv.appendChild(categoryLabel);
+       inputDiv.appendChild(categorySelect);
+   });
 
-    form.appendChild(inputDiv);
+   form.appendChild(inputDiv);
 
+   // Ajout d'une div pour afficher le message d'erreur
+const errorDiv = document.createElement('div');
+errorDiv.classList.add('error-message');
+form.appendChild(errorDiv);
 
     /*création de la Div pour la ligne de séparation*/
     const lineDivider = document.createElement('div');
@@ -524,6 +588,39 @@ function createPhotoForm() {
     SubmitButtonModal.appendChild(SubmitButton);
     form.appendChild(SubmitButtonModal);
 
+/* Ajout de l'événement de clic pour le bouton "Valider" */
+SubmitButton.addEventListener('click', async function () {
+    const title = titleInput.value;
+    const category = categorySelect.value;
+    const file = fileInput.files[0];
+
+    if (title && category && file) {
+        try {
+            // Créer un objet FormData pour envoyer les données
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('category', category);
+            formData.append('photo', file);
+
+            // Effectuer la requête POST vers l'API
+            await sendFormData(formData);
+
+            // Fermer la fenêtre modale
+            closeModal();
+
+            // Mettre à jour les galleries
+            displayWorks();
+            displayWorksInModal();
+        } catch (error) {
+            console.error('Erreur lors de l\'envoi du formulaire :', error);
+        }
+    } else {
+        // Afficher un message d'erreur si le titre n'est pas renseigné
+        alert('Veuillez saisir un titre avant de valider.');
+    }
+});
+
+
     /*Ajout de la flèche pour revenir en arrière*/
     backArrow.classList.add('fas', 'fa-arrow-left', 'back-arrow');
 
@@ -535,8 +632,11 @@ function createPhotoForm() {
         lineDivider.style.display = 'block';
         addPhotoButtonModal.style.display = 'flex';
 
-        /*Supprimer le formulaire d'ajout de photo*/
-        modalWrapper.removeChild(form);
+        /*Supprimer le formulaire d'ajout de photo s'il existe*/
+    const formToRemove = modalWrapper.querySelector('.photo-form');
+    if (formToRemove) {
+        formToRemove.parentNode.removeChild(formToRemove);
+    }
     });
 
     form.appendChild(backArrow);
@@ -556,3 +656,52 @@ function closeModal() {
     modal.style.display = 'none';
     modal.setAttribute('aria-hidden', 'true');
 }
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const titleAndCloseDiv = document.querySelector('.modal-title');
+const worksDiv = document.querySelector('.works-modal');
+const lineDivider = document.querySelector('.line-divider');
+const addPhotoButtonModal = document.querySelector('.add-photo-modal');
+    // Vérifiez si les éléments existent avant d'essayer d'accéder à leurs propriétés
+if (titleAndCloseDiv !== null && worksDiv !== null && lineDivider !== null && addPhotoButtonModal !== null) {
+    titleAndCloseDiv.style.display = 'flex';
+    worksDiv.style.display = 'flex';
+    lineDivider.style.display = 'block';
+    addPhotoButtonModal.style.display = 'flex';
+} else {
+    console.error("Certains éléments n'ont pas été trouvés.");
+}
+
+    console.log("titleAndCloseDiv:", titleAndCloseDiv);
+console.log("worksDiv:", worksDiv);
+console.log("lineDivider:", lineDivider);
+console.log("addPhotoButtonModal:", addPhotoButtonModal);
+});
+})
+
+
+/* Fonction pour envoyer les données du formulaire à l'API */
+async function sendFormData(formData) {
+    try {
+        const response = await fetch('http://localhost:5678/api/works', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+        });
+
+        if (response.ok) {
+            console.log('Formulaire envoyé avec succès');
+        } else if (response.status === 401) {
+            throw new Error('Action non autorisée');
+        } else {
+            throw new Error('Erreur lors de l\'envoi du formulaire');
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+

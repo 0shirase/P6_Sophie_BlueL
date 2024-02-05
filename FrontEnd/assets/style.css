@@ -434,3 +434,10 @@ footer nav ul {
   .inputfile {
 	display: none; /* Masque le champ d'entrée de type "file" par défaut */
 }
+
+.preview-image {
+    max-width: 100%;
+    max-height: 100px; /* Ajustez selon vos besoins */
+    display: block;
+    margin: 10px auto; /* Ajustez selon vos besoins */
+}
