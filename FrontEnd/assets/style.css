@@ -389,7 +389,7 @@ footer nav ul {
 
 .header-div .close-button {
 	position: absolute;
-	top: -25px;
+	top: -33px;
 	right: 30px;
 }
 
@@ -399,7 +399,7 @@ footer nav ul {
 }
 
 .rectangle-div {
-    background-color: #3498db; /* Bleu */
+    background-color: #3498db; 
     padding: 20px;
     text-align: center;
 }
@@ -432,12 +432,12 @@ footer nav ul {
   }
 
   .inputfile {
-	display: none; /* Masque le champ d'entrée de type "file" par défaut */
+	display: none; 
 }
 
 .preview-image {
     max-width: 100%;
-    max-height: 100px; /* Ajustez selon vos besoins */
+    max-height: 100px; 
     display: block;
-    margin: 10px auto; /* Ajustez selon vos besoins */
+    margin: 10px auto; 
 }
