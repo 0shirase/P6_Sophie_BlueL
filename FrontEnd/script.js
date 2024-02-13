@@ -600,14 +600,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const SubmitButton = document.createElement('button');
         SubmitButton.textContent = 'Valider';
         SubmitButton.classList.add('Submit-Button-Modal');
-        SubmitButton.style.backgroundColor = '#1D6154';
+        SubmitButton.style.backgroundColor = '#808080'; 
         SubmitButton.style.color = 'white';
         SubmitButton.style.padding = '10px';
         SubmitButton.style.border = 'none';
-        SubmitButton.style.cursor = 'pointer';
+        SubmitButton.style.cursor = 'not-allowed'; 
         SubmitButton.style.marginTop = '20px';
         SubmitButton.style.borderRadius = '20px';
         SubmitButton.style.width = '37%';
+        SubmitButton.disabled = true; 
 
         SubmitButtonModal.appendChild(SubmitButton);
         form.appendChild(SubmitButtonModal);
@@ -616,10 +617,26 @@ document.addEventListener('DOMContentLoaded', function () {
         form.addEventListener('submit', async function () {
             //event.preventDefault();
 
-            const title = titleInput.value;
-            const category = categorySelect.value;
-            const file = fileInput.files[0];
+            /*Fonction pour vérifier si tous les champs requis sont remplis*/
+    function checkFormValidity() {
+        const title = titleInput.value.trim();
+        const category = categorySelect.value;
+        const file = fileInput.files[0];
 
+        /*Vérification des conditions pour activer le bouton "Valider"*/
+        if (title && category && file) {
+            SubmitButton.disabled = false;
+            SubmitButton.style.backgroundColor = '#1D6154'; 
+            SubmitButton.style.cursor = 'pointer'; 
+        } else {
+            SubmitButton.disabled = true;
+            SubmitButton.style.backgroundColor = '#808080'; 
+            SubmitButton.style.cursor = 'not-allowed'; 
+        }
+    }
+
+
+            
             if (title && category && file) {
                 try {
                     debugger;
@@ -717,3 +734,15 @@ async function sendFormData(formData) {
 }
 
 
+function setupSubmitButton() {
+    const titleInput = document.querySelector('input[name="title"]');
+    const categorySelect = document.querySelector('select[name="category"]');
+    const fileInput = document.querySelector('input[name="photo"]');
+    const SubmitButton = document.querySelector('.Submit-Button-Modal');
+
+    
+    /*Ajout d'écouteurs d'événements pour surveiller les changements dans les champs requis*/
+    titleInput.addEventListener('input', checkFormValidity);
+    categorySelect.addEventListener('change', checkFormValidity);
+    fileInput.addEventListener('change', checkFormValidity);
+}
