@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const portfoliotitle = document.querySelector(".portfoliotitle");
     const modal = document.querySelector('#modal1');
     const token = sessionStorage.getItem("token");
+    const fileInput = document.querySelector('#file-input');
 
 
     let titleAndCloseDiv, worksDiv, lineDivider, addPhotoButtonModal;
@@ -372,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const addPhotoButton = document.createElement('button');
             addPhotoButton.textContent = 'Ajouter une photo';
             addPhotoButton.classList.add('add-photo-button');
-            
+
             addPhotoButtonModal.appendChild(addPhotoButton);
             modalWrapper.appendChild(addPhotoButtonModal);
 
@@ -484,23 +485,24 @@ document.addEventListener('DOMContentLoaded', function () {
         /* Création du label pour le bouton invisible */
         const labelForFileInput = document.createElement('label');
         labelForFileInput.textContent = 'Ajouter une photo';
-        labelForFileInput.htmlFor = 'file-input'; 
-        labelForFileInput.classList.add('add-photo-button-rectangle'); 
+        labelForFileInput.htmlFor = 'file-input';
+        labelForFileInput.classList.add('add-photo-button-rectangle');
         rectangleDiv.appendChild(labelForFileInput);
 
         /* Remplacer le bouton "Ajouter Photo" par un input de type fichier */
         const fileInput = document.createElement('input');
-        fileInput.id = 'file-input'; 
+        fileInput.id = 'file-input';
         fileInput.type = 'file';
         fileInput.name = 'photo';
         fileInput.accept = 'image/*';
-        fileInput.style.display = 'none'; 
+        fileInput.style.display = 'none';
 
         /* Ajouter un événement d'écoute pour le changement de fichier */
         fileInput.addEventListener('change', function (event) {
-            checkFormValidity();
+
             const selectedFile = event.target.files[0];
             if (selectedFile) {
+                checkFormValidity();
                 /* Création d'un objet FileReader */
                 const reader = new FileReader();
 
@@ -550,7 +552,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const categoryLabel = document.createElement('label');
         categoryLabel.textContent = 'Catégorie';
 
-        
+
         /*Appel de createCategorySelect avec un callback*/
         createCategorySelect((categorySelect) => {
             /* Ajout de style au categorySelect*/
@@ -564,12 +566,12 @@ document.addEventListener('DOMContentLoaded', function () {
             inputDiv.appendChild(categorySelect);
             categorySelect.addEventListener('change', checkFormValidity);
             titleInput.addEventListener('input', checkFormValidity);
-       
-        
+
+
         });
         form.appendChild(inputDiv);
 
-        
+
 
         /*création d'une div pour afficher le message d'erreur*/
         const errorDiv = document.createElement('div');
@@ -605,18 +607,19 @@ document.addEventListener('DOMContentLoaded', function () {
         form.appendChild(SubmitButtonModal);
 
 
-        
+
 
         //setupSubmitButton();
 
         /* Ajout de l'événement de clic pour le bouton "Valider" */
         form.addEventListener('submit', async function (event) {
+
             event.preventDefault();
             alert("qsdqsdqs");
 
             const titleInput = document.querySelector('.input-div input');
             const categorySelect = document.querySelector('.input-div select');
-            const fileInput = document.querySelector('#file-input');
+
             //const SubmitButton = document.querySelector('.Submit-Button-Modal');
 
             const title = titleInput.value.trim();
@@ -700,14 +703,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function sendFormData(formData) {
         try {
-            const response = await fetch("http://localhost:5678/api/works", {
+            const response = await fetch(`http://localhost:5678/api/works`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
                 body: formData,
             });
-    
+
             if (response.ok) {
                 console.log("Données envoyées avec succès");
             } else {
@@ -715,10 +718,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } catch (error) {
             console.error(error.message);
-        }   
+        }
     }
-    
-    
+
+
     /*Fonction pour vérifier si tous les champs requis sont remplis*/
     function checkFormValidity() {
 
@@ -730,7 +733,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const title = titleInput.value.trim();
         const category = categorySelect.value;
         const file = fileInput.value;
-    
+
         /*Vérification des conditions pour activer le bouton "Valider"*/
         if (title && category && file) {
             SubmitButton.disabled = false;
@@ -742,21 +745,21 @@ document.addEventListener('DOMContentLoaded', function () {
             SubmitButton.style.cursor = 'not-allowed';
         }
     }
-    
-    
-    
-   /* function setupSubmitButton() {
-        const titleInput = document.querySelector('.input-div input');
-        const categorySelect = document.querySelector('.input-div select');
-        const fileInput = document.querySelector('#file-input');
-        const SubmitButton = document.querySelector('.Submit-Button-Modal');
-    
-       console.log(titleInput)
-        //Ajout d'écouteurs d'événements pour surveiller les changements dans les champs requis
-        titleInput.addEventListener('input', checkFormValidity);
-        categorySelect.addEventListener('change', checkFormValidity);
-        fileInput.addEventListener('change', checkFormValidity);
-    }*/
+
+
+
+    /* function setupSubmitButton() {
+         const titleInput = document.querySelector('.input-div input');
+         const categorySelect = document.querySelector('.input-div select');
+         const fileInput = document.querySelector('#file-input');
+         const SubmitButton = document.querySelector('.Submit-Button-Modal');
+     
+        console.log(titleInput)
+         //Ajout d'écouteurs d'événements pour surveiller les changements dans les champs requis
+         titleInput.addEventListener('input', checkFormValidity);
+         categorySelect.addEventListener('change', checkFormValidity);
+         fileInput.addEventListener('change', checkFormValidity);
+     }*/
 })
 
 
@@ -764,4 +767,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
- 
