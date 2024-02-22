@@ -1,10 +1,11 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     const gallery = document.querySelector('.gallery');
     const filters = document.querySelector(".filters");
     const portfoliotitle = document.querySelector(".portfoliotitle");
     const modal = document.querySelector('#modal1');
     const token = sessionStorage.getItem("token");
-   
+
 
     let titleAndCloseDiv, worksDiv, lineDivider, addPhotoButtonModal;
 
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (token) {
             createModal();
-            closeModal();
+            //closeModal();
         }
     }
 
@@ -230,16 +231,6 @@ document.addEventListener('DOMContentLoaded', function () {
             /*ajoute le texte à la div modifiedButton*/
             modifiedButton.appendChild(buttonText);
 
-            /* style pour le bouton modifié*/
-            modifiedButton.style.display = 'flex';
-            modifiedButton.style.alignItems = 'center';
-            modifiedButton.style.cursor = 'pointer';
-            modifiedButton.style.color = 'black';
-            modifiedButton.style.fontSize = '15px';
-
-            buttonText.parentNode.style.fontWeight = 'normal';
-
-
             /*event listener pour ouvrir la modale*/
             modifiedButton.addEventListener('click', openModal);
 
@@ -381,15 +372,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const addPhotoButton = document.createElement('button');
             addPhotoButton.textContent = 'Ajouter une photo';
             addPhotoButton.classList.add('add-photo-button');
-            addPhotoButton.style.backgroundColor = '#1D6154';
-            addPhotoButton.style.color = 'white';
-            addPhotoButton.style.padding = '10px';
-            addPhotoButton.style.border = 'none';
-            addPhotoButton.style.cursor = 'pointer';
-            addPhotoButton.style.marginTop = '20px';
-            addPhotoButton.style.borderRadius = '20px';
-            addPhotoButton.style.width = '45%';
-
+            
             addPhotoButtonModal.appendChild(addPhotoButton);
             modalWrapper.appendChild(addPhotoButtonModal);
 
@@ -454,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    
+
     /*Fonction pour créer le formulaire d'ajout de photo*/
     function createPhotoForm() {
         const form = document.createElement('form');
@@ -501,20 +484,21 @@ document.addEventListener('DOMContentLoaded', function () {
         /* Création du label pour le bouton invisible */
         const labelForFileInput = document.createElement('label');
         labelForFileInput.textContent = 'Ajouter une photo';
-        labelForFileInput.htmlFor = 'file-input'; // Associe le label à l'input file
-        labelForFileInput.classList.add('add-photo-button-rectangle'); // Ajoute la classe CSS au label
+        labelForFileInput.htmlFor = 'file-input'; 
+        labelForFileInput.classList.add('add-photo-button-rectangle'); 
         rectangleDiv.appendChild(labelForFileInput);
 
         /* Remplacer le bouton "Ajouter Photo" par un input de type fichier */
         const fileInput = document.createElement('input');
-        fileInput.id = 'file-input'; // Donne un ID à l'input file
+        fileInput.id = 'file-input'; 
         fileInput.type = 'file';
         fileInput.name = 'photo';
         fileInput.accept = 'image/*';
-        fileInput.style.display = 'none'; // Cache l'input file
+        fileInput.style.display = 'none'; 
 
         /* Ajouter un événement d'écoute pour le changement de fichier */
         fileInput.addEventListener('change', function (event) {
+            checkFormValidity();
             const selectedFile = event.target.files[0];
             if (selectedFile) {
                 /* Création d'un objet FileReader */
@@ -566,6 +550,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const categoryLabel = document.createElement('label');
         categoryLabel.textContent = 'Catégorie';
 
+        
         /*Appel de createCategorySelect avec un callback*/
         createCategorySelect((categorySelect) => {
             /* Ajout de style au categorySelect*/
@@ -577,8 +562,14 @@ document.addEventListener('DOMContentLoaded', function () {
             inputDiv.appendChild(titleInput);
             inputDiv.appendChild(categoryLabel);
             inputDiv.appendChild(categorySelect);
+            categorySelect.addEventListener('change', checkFormValidity);
+            titleInput.addEventListener('input', checkFormValidity);
+       
+        
         });
         form.appendChild(inputDiv);
+
+        
 
         /*création d'une div pour afficher le message d'erreur*/
         const errorDiv = document.createElement('div');
@@ -595,48 +586,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /* création de la Div pour le bouton Valider*/
         const SubmitButtonModal = document.createElement('div');
-        SubmitButtonModal.classList.add('Submit-Button-Modal');
+        SubmitButtonModal.classList.add('Submit-Button-Div');
 
         const SubmitButton = document.createElement('button');
         SubmitButton.textContent = 'Valider';
         SubmitButton.classList.add('Submit-Button-Modal');
-        SubmitButton.style.backgroundColor = '#808080'; 
+        SubmitButton.style.backgroundColor = '#808080';
         SubmitButton.style.color = 'white';
         SubmitButton.style.padding = '10px';
         SubmitButton.style.border = 'none';
-        SubmitButton.style.cursor = 'not-allowed'; 
+        SubmitButton.style.cursor = 'not-allowed';
         SubmitButton.style.marginTop = '20px';
         SubmitButton.style.borderRadius = '20px';
         SubmitButton.style.width = '37%';
-        SubmitButton.disabled = true; 
+        SubmitButton.disabled = true;
 
         SubmitButtonModal.appendChild(SubmitButton);
         form.appendChild(SubmitButtonModal);
 
+
+        
+
+        //setupSubmitButton();
+
         /* Ajout de l'événement de clic pour le bouton "Valider" */
-        form.addEventListener('submit', async function () {
-            //event.preventDefault();
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            alert("qsdqsdqs");
 
-            /*Fonction pour vérifier si tous les champs requis sont remplis*/
-    function checkFormValidity() {
-        const title = titleInput.value.trim();
-        const category = categorySelect.value;
-        const file = fileInput.files[0];
+            const titleInput = document.querySelector('.input-div input');
+            const categorySelect = document.querySelector('.input-div select');
+            const fileInput = document.querySelector('#file-input');
+            //const SubmitButton = document.querySelector('.Submit-Button-Modal');
 
-        /*Vérification des conditions pour activer le bouton "Valider"*/
-        if (title && category && file) {
-            SubmitButton.disabled = false;
-            SubmitButton.style.backgroundColor = '#1D6154'; 
-            SubmitButton.style.cursor = 'pointer'; 
-        } else {
-            SubmitButton.disabled = true;
-            SubmitButton.style.backgroundColor = '#808080'; 
-            SubmitButton.style.cursor = 'not-allowed'; 
-        }
-    }
+            const title = titleInput.value.trim();
+            const category = categorySelect.value;
+            const file = fileInput.files[0];
 
 
-            
             if (title && category && file) {
                 try {
                     debugger;
@@ -709,40 +696,72 @@ document.addEventListener('DOMContentLoaded', function () {
             formToRemove.parentNode.removeChild(formToRemove);
         }
     }
+
+
+    async function sendFormData(formData) {
+        try {
+            const response = await fetch("http://localhost:5678/api/works", {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            });
+    
+            if (response.ok) {
+                console.log("Données envoyées avec succès");
+            } else {
+                throw new Error('Erreur lors de l\'envoi des données');
+            }
+        } catch (error) {
+            console.error(error.message);
+        }   
+    }
+    
+    
+    /*Fonction pour vérifier si tous les champs requis sont remplis*/
+    function checkFormValidity() {
+
+        const titleInput = document.querySelector('.input-div input');
+        const categorySelect = document.querySelector('.input-div select');
+        const fileInput = document.querySelector('#file-input');
+        const SubmitButton = document.querySelector('.Submit-Button-Modal');
+
+        const title = titleInput.value.trim();
+        const category = categorySelect.value;
+        const file = fileInput.value;
+    
+        /*Vérification des conditions pour activer le bouton "Valider"*/
+        if (title && category && file) {
+            SubmitButton.disabled = false;
+            SubmitButton.style.backgroundColor = '#1D6154';
+            SubmitButton.style.cursor = 'pointer';
+        } else {
+            SubmitButton.disabled = true;
+            SubmitButton.style.backgroundColor = '#808080';
+            SubmitButton.style.cursor = 'not-allowed';
+        }
+    }
+    
+    
+    
+   /* function setupSubmitButton() {
+        const titleInput = document.querySelector('.input-div input');
+        const categorySelect = document.querySelector('.input-div select');
+        const fileInput = document.querySelector('#file-input');
+        const SubmitButton = document.querySelector('.Submit-Button-Modal');
+    
+       console.log(titleInput)
+        //Ajout d'écouteurs d'événements pour surveiller les changements dans les champs requis
+        titleInput.addEventListener('input', checkFormValidity);
+        categorySelect.addEventListener('change', checkFormValidity);
+        fileInput.addEventListener('change', checkFormValidity);
+    }*/
 })
 
 
 
-async function sendFormData(formData) {
-    try {
-        const response = await fetch("http://localhost:5678/api/works", {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-        });
-
-        if (response.ok) {
-            console.log("Données envoyées avec succès");
-        } else {
-            throw new Error('Erreur lors de l\'envoi des données');
-        }
-    } catch (error) {
-        console.error(error.message);
-    }
-}
 
 
-function setupSubmitButton() {
-    const titleInput = document.querySelector('input[name="title"]');
-    const categorySelect = document.querySelector('select[name="category"]');
-    const fileInput = document.querySelector('input[name="photo"]');
-    const SubmitButton = document.querySelector('.Submit-Button-Modal');
 
-    
-    /*Ajout d'écouteurs d'événements pour surveiller les changements dans les champs requis*/
-    titleInput.addEventListener('input', checkFormValidity);
-    categorySelect.addEventListener('change', checkFormValidity);
-    fileInput.addEventListener('change', checkFormValidity);
-}
+ 

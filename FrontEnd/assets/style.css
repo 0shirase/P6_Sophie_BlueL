@@ -227,7 +227,13 @@ footer nav ul {
 }
 
 .modified-button {
+	font-size: 15px;
 	font-family: Work Sans;
+	font-weight: normal;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	color: black;
 }
 
 .error-message {
@@ -253,7 +259,7 @@ footer nav ul {
     left: 50%;
     transform: translate(-50%, -50%);
     overflow: auto;
-    width: 37%;
+    width: 35%;
     padding: 50px;
     background-color: #FFF;
 	flex-wrap: wrap;
@@ -360,8 +366,8 @@ footer nav ul {
 
 .back-arrow {
     position: absolute;
-    top: -25px;
-    left: 30px;
+    top: -35px;
+    left: -30px;
     font-size: 20px;
     color: black;
     cursor: pointer;
@@ -389,19 +395,13 @@ footer nav ul {
 
 .header-div .close-button {
 	position: absolute;
-	top: -33px;
-	right: 30px;
+	top: -40px;
+	right: -25px;
 }
 
-.Submit-Button-Modal {
+.Submit-Button-Div {
 	display: flex;
 	justify-content: center;
-}
-
-.rectangle-div {
-    background-color: #3498db; 
-    padding: 20px;
-    text-align: center;
 }
 
 .add-photo-button-rectangle {
@@ -419,10 +419,10 @@ footer nav ul {
 .rectangle-div {
 	background: #E8F1F6;
 	border-radius: 3px;
-	padding-left: 25%;
-	padding-right: 25%;
 	display: flex;
 	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .image-icon {
@@ -436,8 +436,36 @@ footer nav ul {
 }
 
 .preview-image {
-    max-width: 100%;
-    max-height: 100px; 
+    width: 35%;
+    height: 100%; 
     display: block;
-    margin: 10px auto; 
+    object-fit: cover;
 }
+
+/*.Submit-Button-Modal {
+	background-color: #808080;
+	color :white;
+	padding :10px;
+	border : none;
+	cursor :not-allowed;
+	margin-top:20px;
+	border-radius: 20px;
+	width :37%;
+}*/
+
+.add-photo-button {
+	background-color:#1D6154;
+	color: white;
+	padding: 10px;
+	border: none;
+	cursor: pointer;
+	margin-top: 20px;
+	border-radius: 20px;
+	width: 45%;
+}
+
+/*.input-div {
+	padding :4px;
+	border :none;
+	box-shadow :0 0 5px rgba(0, 0, 0, 0.3);
+}*/
