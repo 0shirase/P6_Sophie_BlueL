@@ -141,6 +141,8 @@ li:hover {
 
 .gallery img {
 	width: 100%;
+	object-fit: cover;
+	height: 100%;
 
 }
 #contact {
@@ -276,7 +278,7 @@ footer nav ul {
     width: 100px; 
 	height: 130px;
     display: flex;
-	
+	object-fit: cover;
 }	
 
 .modal-wrapper h3 {
@@ -427,6 +429,7 @@ footer nav ul {
 
 .image-icon {
 	margin-bottom: 10px; 
+	margin-top: 15px;
 	font-size: 45px; 
 	color: #CBD6DC;
   }
@@ -442,17 +445,6 @@ footer nav ul {
     object-fit: cover;
 }
 
-/*.Submit-Button-Modal {
-	background-color: #808080;
-	color :white;
-	padding :10px;
-	border : none;
-	cursor :not-allowed;
-	margin-top:20px;
-	border-radius: 20px;
-	width :37%;
-}*/
-
 .add-photo-button {
 	background-color:#1D6154;
 	color: white;
@@ -464,8 +456,7 @@ footer nav ul {
 	width: 45%;
 }
 
-/*.input-div {
-	padding :4px;
-	border :none;
-	box-shadow :0 0 5px rgba(0, 0, 0, 0.3);
-}*/
+.info-text {
+	margin-bottom: 15px;
+}
+

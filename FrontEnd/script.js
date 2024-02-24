@@ -428,6 +428,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const option = document.createElement('option');
                 option.value = category.id;
                 option.text = category.name;
+
                 categorySelect.appendChild(option);
             });
         } catch (error) {
@@ -484,7 +485,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /* Création du label pour le bouton invisible */
         const labelForFileInput = document.createElement('label');
-        labelForFileInput.textContent = 'Ajouter une photo';
+        labelForFileInput.textContent = '+ Ajouter photo';
         labelForFileInput.htmlFor = 'file-input';
         labelForFileInput.classList.add('add-photo-button-rectangle');
         rectangleDiv.appendChild(labelForFileInput);
@@ -497,31 +498,49 @@ document.addEventListener('DOMContentLoaded', function () {
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
+        /* Fonction pour vérifier la taille de l'image */
+        function checkImageSize(file) {
+            const maxSize = 4 * 1024 * 1024; // 4 Mo en octets
+            if (file.size > maxSize) {
+                return false;
+            }
+            return true;
+        }
+
+
         /* Ajouter un événement d'écoute pour le changement de fichier */
         fileInput.addEventListener('change', function (event) {
 
             const selectedFile = event.target.files[0];
             if (selectedFile) {
-                checkFormValidity();
-                /* Création d'un objet FileReader */
-                const reader = new FileReader();
+                if (!checkImageSize(selectedFile)) {
+                    alert('La taille de l\'image dépasse 4 Mo. Veuillez sélectionner une image de taille inférieure.');
+                    event.target.value = ''; // Réinitialiser la valeur de l'input de fichier
+                } else {
+                    checkFormValidity();
+                    /* Création d'un objet FileReader */
+                    const reader = new FileReader();
 
-                /* Définir la fonction de rappel pour la lecture du fichier */
-                reader.onload = function (e) {
-                    /* Créer une balise img pour afficher la miniature */
-                    const previewImage = document.createElement('img');
-                    previewImage.src = e.target.result;
-                    previewImage.classList.add('preview-image');
+                    /* Définir la fonction de rappel pour la lecture du fichier */
+                    reader.onload = function (e) {
+                        /* Créer une balise img pour afficher la miniature */
+                        const previewImage = document.createElement('img');
+                        previewImage.src = e.target.result;
+                        previewImage.classList.add('preview-image');
 
-                    /* Supprimer le contenu actuel de rectangleDiv */
-                    rectangleDiv.innerHTML = '';
+                        /* Supprimer le contenu actuel de rectangleDiv */
+                        //rectangleDiv.style.display = 'none';
+                        labelForFileInput.style.display = 'none';
+                        infoText.style.display = 'none';
+                        imageIcon.style.display = 'none';
 
-                    /* Ajouter la miniature à rectangleDiv */
-                    rectangleDiv.appendChild(previewImage);
-                };
+                        /* Ajouter la miniature à rectangleDiv */
+                        rectangleDiv.appendChild(previewImage);
+                    };
 
-                /* Lire le fichier en tant que Data URL */
-                reader.readAsDataURL(selectedFile);
+                    /* Lire le fichier en tant que Data URL */
+                    reader.readAsDataURL(selectedFile);
+                }
             }
         });
         rectangleDiv.appendChild(fileInput);
@@ -529,6 +548,7 @@ document.addEventListener('DOMContentLoaded', function () {
         /*Ajout du texte en dessous du bouton*/
         const infoText = document.createElement('p');
         infoText.textContent = 'jpg.png : 4mo max';
+        infoText.classList.add('info-text');
         rectangleDiv.appendChild(infoText);
 
         /*Ajout du rectangle à la div du formulaire*/
@@ -545,7 +565,7 @@ document.addEventListener('DOMContentLoaded', function () {
         titleInput.type = 'text';
         titleInput.name = 'title';
         /*Ajout de style au titre input*/
-        titleInput.style.padding = '4px';
+        titleInput.style.padding = '10px';
         titleInput.style.border = 'none';
         titleInput.style.boxShadow = '0 0 5px rgba(0, 0, 0, 0.3)';
 
@@ -556,9 +576,10 @@ document.addEventListener('DOMContentLoaded', function () {
         /*Appel de createCategorySelect avec un callback*/
         createCategorySelect((categorySelect) => {
             /* Ajout de style au categorySelect*/
-            categorySelect.style.padding = '4px';
+            categorySelect.style.padding = '10px';
             categorySelect.style.border = 'none';
             categorySelect.style.boxShadow = '0 0 5px rgba(0, 0, 0, 0.3)';
+            categorySelect.style.appearance = 'none';
 
             inputDiv.appendChild(titleLabel);
             inputDiv.appendChild(titleInput);
@@ -607,20 +628,15 @@ document.addEventListener('DOMContentLoaded', function () {
         form.appendChild(SubmitButtonModal);
 
 
-
-
-        //setupSubmitButton();
-
         /* Ajout de l'événement de clic pour le bouton "Valider" */
         form.addEventListener('submit', async function (event) {
 
             event.preventDefault();
-            alert("qsdqsdqs");
+            //alert("qsdqsdqs");
 
             const titleInput = document.querySelector('.input-div input');
             const categorySelect = document.querySelector('.input-div select');
 
-            //const SubmitButton = document.querySelector('.Submit-Button-Modal');
 
             const title = titleInput.value.trim();
             const category = categorySelect.value;
@@ -629,12 +645,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (title && category && file) {
                 try {
-                    debugger;
+                    //debugger;
                     /*Créer un objet FormData pour envoyer les données*/
                     const formData = new FormData();
                     formData.append('title', title);
                     formData.append('category', category);
-                    formData.append('photo', file);
+                    formData.append('image', file);
 
                     /*Effectuer la requête POST vers l'API*/
                     await sendFormData(formData);
@@ -642,6 +658,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     /* Mise à jour des gallery*/
                     displayWorks();
                     displayWorksInModal();
+
+                    closeModal();
                 } catch (error) {
                     console.error('Erreur lors de l\'envoi du formulaire :', error);
                 }
@@ -709,6 +727,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     Authorization: `Bearer ${token}`,
                 },
                 body: formData,
+
             });
 
             if (response.ok) {
@@ -735,7 +754,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const file = fileInput.value;
 
         /*Vérification des conditions pour activer le bouton "Valider"*/
-        if (title && category && file) {
+        if (title && category !== "Veuillez choisir une catégorie" && file) {
             SubmitButton.disabled = false;
             SubmitButton.style.backgroundColor = '#1D6154';
             SubmitButton.style.cursor = 'pointer';
@@ -745,21 +764,6 @@ document.addEventListener('DOMContentLoaded', function () {
             SubmitButton.style.cursor = 'not-allowed';
         }
     }
-
-
-
-    /* function setupSubmitButton() {
-         const titleInput = document.querySelector('.input-div input');
-         const categorySelect = document.querySelector('.input-div select');
-         const fileInput = document.querySelector('#file-input');
-         const SubmitButton = document.querySelector('.Submit-Button-Modal');
-     
-        console.log(titleInput)
-         //Ajout d'écouteurs d'événements pour surveiller les changements dans les champs requis
-         titleInput.addEventListener('input', checkFormValidity);
-         categorySelect.addEventListener('change', checkFormValidity);
-         fileInput.addEventListener('change', checkFormValidity);
-     }*/
 })
 
 
