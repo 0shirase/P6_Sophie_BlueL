@@ -614,15 +614,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const SubmitButton = document.createElement('button');
         SubmitButton.textContent = 'Valider';
         SubmitButton.classList.add('Submit-Button-Modal');
-        SubmitButton.style.backgroundColor = '#808080';
-        SubmitButton.style.color = 'white';
-        SubmitButton.style.padding = '10px';
-        SubmitButton.style.border = 'none';
-        SubmitButton.style.cursor = 'not-allowed';
-        SubmitButton.style.marginTop = '20px';
-        SubmitButton.style.borderRadius = '20px';
-        SubmitButton.style.width = '37%';
-        SubmitButton.disabled = true;
+        
 
         SubmitButtonModal.appendChild(SubmitButton);
         form.appendChild(SubmitButtonModal);
